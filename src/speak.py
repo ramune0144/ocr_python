@@ -8,4 +8,8 @@ def speak(dd):
     tts.save('./data/speech.mp3')
     playsound('./data/speech.mp3')
     os.remove('./data/speech.mp3')
+    try:
+        os.remove('./data/1.png')
+    except:
+        pass
     return 1

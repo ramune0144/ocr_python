@@ -1,6 +1,6 @@
 
 import ctypes
-from src import speak,ocr
+from . import speak,ocr
 def on_end(systray):
     speak.speak("ปิดprogram")
 def on_about(systray):
