@@ -1,4 +1,3 @@
-
 import ctypes
 from . import speak,ocr
 def on_end(systray):
