@@ -20,7 +20,7 @@ from src import speak,event #เป็นการนำเข้าโมดู
 #          \  \ `_.   \_ __\ /__ _/   .-` /  /
 #      =====`-.____`.___ \_____/___.-`___.-'=====
 
-_LANGCODE = []
+_LANGCODE = ["eng", "th"]
 
 def set_langcode_eng_thai(systray):
     global _LANGCODE
