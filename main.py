@@ -19,14 +19,45 @@ from src import speak,event #เป็นการนำเข้าโมดู
 #          | | :  `- \`.;`\ _ /`;.`/ - ` : | |
 #          \  \ `_.   \_ __\ /__ _/   .-` /  /
 #      =====`-.____`.___ \_____/___.-`___.-'=====
-#                        `=---='
 
+_LANGCODE = []
+
+def set_langcode_eng_thai(systray):
+    global _LANGCODE
+    _LANGCODE = ["eng", "th"]
+
+def set_langcode_thai_eng(systray):
+    global _LANGCODE
+    _LANGCODE = ["tha", "en"]
+
+def set_langcode_japanese_thai(systray):
+    global _LANGCODE
+    _LANGCODE = ["jpn", "th"]
+
+def set_langcode_thai_japanese(systray):
+    global _LANGCODE
+    _LANGCODE = ["tha", "ja"]
+
+def set_langcode_chinese_thai(systray):
+    global _LANGCODE
+    _LANGCODE = ["chi_sim", "th"]
+
+def set_langcode_thai_chinese(systray):
+    global _LANGCODE
+    _LANGCODE = ["tha", "zh-cn"]
 if __name__ == "__main__": #เป็นการประกาศให้pythonรู้ว่าตรงนี้คือส่วนการทำงานหลัก
-    menu_options = (("About", None,event.on_about),("How", None,event.on_how)) #เป็นการสร้างเมนูชื่อ Aboutกับ HowของSysTray
-    systray = SysTrayIcon("./language.ico", "En_Th_OCR", menu_options,on_quit=event.on_end,) #เป็นการสร้างSysTrayขึ้นมาชื่อEn_Th_OCRโดยตั้งiconด้วยรูป./language.ico
+    menu_options = (("About", None,event.on_about),("How", None,event.on_how),('Language', "simon.ico", (
+                                                ('Eng-Thai', "simon.ico", set_langcode_eng_thai),
+                                                ('Thai-Eng', None, set_langcode_thai_eng),
+                                                ('japanese-Thai', None, set_langcode_japanese_thai),
+                                                ('Thai-japanese', None, set_langcode_thai_japanese),
+                                                ('Chinese-Thai', None, set_langcode_chinese_thai),
+                                                ('Thai-Chinese', None, set_langcode_thai_chinese),
+                                              ))) #เป็นการสร้างเมนูชื่อ Aboutกับ HowของSysTray
+    systray = SysTrayIcon("./language.ico", "En_Th_OCR", menu_options,on_quit= event.on_end,) #เป็นการสร้างSysTrayขึ้นมาชื่อEn_Th_OCRโดยตั้งiconด้วยรูป./language.ico
     systray.start()#เริ่มการทำงานของTrayIcon
-    speak.speak("เริ่มใช้programเเปลภาษา")#ทำให้ระบบพูดว่า"เริ่มใช้programเเปลภาษา"
-    keyboard.add_hotkey('ctrl + shift + z', event.run)#เริ่มใช้hotkey ctrl + shift + z เพื่อทำงานevent.run
+    speak.speak("เริ่มใช้programเเปลภาษา",'th')#ทำให้ระบบพูดว่า"เริ่มใช้programเเปลภาษา"
+    keyboard.add_hotkey('ctrl + shift + z',lambda: event.run(_LANGCODE))#เริ่มใช้hotkey ctrl + shift + z เพื่อทำงานevent.run
     
     
  

@@ -2,7 +2,7 @@ googletrans==3.1.0a0
 gTTS==2.2.3
 keyboard==0.13.5
 opencv_python==4.5.5.62
-Pillow==8.4.0
+
 playsound==1.2.2
 pynput==1.7.6
 pytesseract==0.3.8
