@@ -45,6 +45,12 @@ def set_langcode_chinese_thai(systray):
 def set_langcode_thai_chinese(systray):
     global _LANGCODE
     _LANGCODE = ["tha", "zh-cn"]
+def set_langcode_thai_korean(systray):
+    global _LANGCODE
+    _LANGCODE = ["tha","ko"]
+def set_langcode_korean_thai(systray):
+    global _LANGCODE
+    _LANGCODE = ["kor","th"]
 if __name__ == "__main__": #เป็นการประกาศให้pythonรู้ว่าตรงนี้คือส่วนการทำงานหลัก
     menu_options = (("About", None,event.on_about),("How", None,event.on_how),('Language', "simon.ico", (
                                                 ('Eng-Thai', "simon.ico", set_langcode_eng_thai),
@@ -53,6 +59,8 @@ if __name__ == "__main__": #เป็นการประกาศให้pyth
                                                 ('Thai-japanese', None, set_langcode_thai_japanese),
                                                 ('Chinese-Thai', None, set_langcode_chinese_thai),
                                                 ('Thai-Chinese', None, set_langcode_thai_chinese),
+                                                ('Thai-Korean', None, set_langcode_thai_korean),
+                                                ('Korean-Thai', None, set_langcode_korean_thai),
                                               ))) #เป็นการสร้างเมนูชื่อ Aboutกับ HowของSysTray
     systray = SysTrayIcon("./language.ico", "En_Th_OCR", menu_options,on_quit= event.on_end,) #เป็นการสร้างSysTrayขึ้นมาชื่อEn_Th_OCRโดยตั้งiconด้วยรูป./language.ico
     systray.start()#เริ่มการทำงานของTrayIcon
