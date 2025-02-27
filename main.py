@@ -1,6 +1,11 @@
 from infi.systray import SysTrayIcon #เป็นการนำเข้าmoduleเพื่อจะเอาไว้ทำTrayIconมุมล่างจอ
 import keyboard #เป็นการนำเข้าmodule เพื่อใช้ keybrod เพื่อจะทำ hotkey
 from src import speak,event #เป็นการนำเข้าโมดูลspeakกับevent speakคือโมดูลสำหรับพูด event คือโมดูลการทำงานเพื่อสร้างtrayIcon
+import tkinter as tk
+from PIL import Image, ImageTk
+import time
+from tkinter import ttk
+from threading import Thread
 #!!!!!!!!!!!!!!!!!! This is a debugger !!!!!!!!!!!!!!!!!!
 #                        _oo0oo_
 #                       o8888888o
@@ -19,7 +24,20 @@ from src import speak,event #เป็นการนำเข้าโมดู
 #          | | :  `- \`.;`\ _ /`;.`/ - ` : | |
 #          \  \ `_.   \_ __\ /__ _/   .-` /  /
 #      =====`-.____`.___ \_____/___.-`___.-'=====
-
+def show_splash():
+    splash_root = tk.Tk()
+    splash_root.overrideredirect(True)
+    splash_root.geometry("400x300+500+250")
+    
+    img = Image.open("splash.png")  # ใส่รูป splash screen ที่ต้องการ
+    img = img.resize((400, 300), Image.ANTIALIAS)
+    splash_img = ImageTk.PhotoImage(img)
+    
+    label = tk.Label(splash_root, image=splash_img)
+    label.pack()
+    
+    splash_root.after(3000, splash_root.destroy)  # แสดงเป็นเวลา 3 วินาที
+    splash_root.mainloop()
 _LANGCODE = ["eng", "th"]
 
 def set_langcode_eng_thai(systray):
@@ -51,21 +69,52 @@ def set_langcode_thai_korean(systray):
 def set_langcode_korean_thai(systray):
     global _LANGCODE
     _LANGCODE = ["kor","th"]
-if __name__ == "__main__": #เป็นการประกาศให้pythonรู้ว่าตรงนี้คือส่วนการทำงานหลัก
-    menu_options = (("About", None,event.on_about),("How", None,event.on_how),('Language', "simon.ico", (
-                                                ('Eng-Thai', "simon.ico", set_langcode_eng_thai),
-                                                ('Thai-Eng', None, set_langcode_thai_eng),
-                                                ('japanese-Thai', None, set_langcode_japanese_thai),
-                                                ('Thai-japanese', None, set_langcode_thai_japanese),
-                                                ('Chinese-Thai', None, set_langcode_chinese_thai),
-                                                ('Thai-Chinese', None, set_langcode_thai_chinese),
-                                                ('Thai-Korean', None, set_langcode_thai_korean),
-                                                ('Korean-Thai', None, set_langcode_korean_thai),
-                                              ))) #เป็นการสร้างเมนูชื่อ Aboutกับ HowของSysTray
-    systray = SysTrayIcon("./language.ico", "En_Th_OCR", menu_options,on_quit= event.on_end,) #เป็นการสร้างSysTrayขึ้นมาชื่อEn_Th_OCRโดยตั้งiconด้วยรูป./language.ico
-    systray.start()#เริ่มการทำงานของTrayIcon
-    speak.speak("เริ่มใช้programเเปลภาษา",'th')#ทำให้ระบบพูดว่า"เริ่มใช้programเเปลภาษา"
-    keyboard.add_hotkey('ctrl + shift + z',lambda: event.run(_LANGCODE))#เริ่มใช้hotkey ctrl + shift + z เพื่อทำงานevent.run
+
     
+def main_window():
+    splash.destroy()
+    start_tray()
     
- 
+def show_splash():
+    global splash
+    splash = tk.Tk()
+    splash.title("Loading...")
+    splash.geometry("300x200")
+    splash.overrideredirect(True)
+    
+    screen_width = splash.winfo_screenwidth()
+    screen_height = splash.winfo_screenheight()
+    x = (screen_width - 300) // 2
+    y = (screen_height - 200) // 2
+    splash.geometry(f"300x200+{x}+{y}")
+    
+
+    
+    label = tk.Label(splash, text="ยินดีต้อนรับเข้าสู่โปรเเกรมเเปลภาษา v 1.0", font=("Arial", 12))
+    label.pack(pady=20)
+
+    
+    splash.after(3000, main_window)
+    splash.mainloop()
+def start_tray():
+    menu_options = (("About", None, event.on_about),
+                    ("How", None, event.on_how),
+                    ('Language', "simon.ico", (
+                        ('Eng-Thai', "simon.ico", set_langcode_eng_thai),
+                        ('Thai-Eng', None, set_langcode_thai_eng),
+                        ('Japanese-Thai', None, set_langcode_japanese_thai),
+                        ('Thai-Japanese', None, set_langcode_thai_japanese),
+                        ('Chinese-Thai', None, set_langcode_chinese_thai),
+                        ('Thai-Chinese', None, set_langcode_thai_chinese),
+                        ('Thai-Korean', None, set_langcode_thai_korean),
+                        ('Korean-Thai', None, set_langcode_korean_thai),
+                    )))
+    systray = SysTrayIcon("./language.ico", "En_Th_OCR", menu_options, on_quit=event.on_end)
+    systray.start()
+    speak.speak("เริ่มใช้โปรแกรมแปลภาษา", 'th')
+    keyboard.add_hotkey('ctrl + shift + z', lambda: event.run(_LANGCODE))
+
+if __name__ == "__main__":
+    splash_thread = Thread(target=show_splash)
+    splash_thread.start()
+
