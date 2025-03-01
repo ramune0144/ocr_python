@@ -3,27 +3,9 @@ import keyboard #เป็นการนำเข้าmodule เพื่อ�
 from src import speak,event #เป็นการนำเข้าโมดูลspeakกับevent speakคือโมดูลสำหรับพูด event คือโมดูลการทำงานเพื่อสร้างtrayIcon
 import tkinter as tk
 from PIL import Image, ImageTk
-import time
 from tkinter import ttk
 from threading import Thread
-#!!!!!!!!!!!!!!!!!! This is a debugger !!!!!!!!!!!!!!!!!!
-#                        _oo0oo_
-#                       o8888888o
-#                       88" . "88
-#                       (| -_- |)
-#                       0\  =  /0
-#                     ___/`---'\___
-#                   .' \|     |// '.
-#                  / \|||  :  |||// \
-#                 / _||||| -:- |||||- \
-#                |   | \\  -  /// |   |
-#                | \_|  ''\---/''  |_/ |
-#                \  .-\__  '-'  ___/-. /
-#              ___'. .'  /--.--\  `. .'___
-#           ."" '<  `.___\_<|>_/___.' >' "".
-#          | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-#          \  \ `_.   \_ __\ /__ _/   .-` /  /
-#      =====`-.____`.___ \_____/___.-`___.-'=====
+
 def show_splash():
     splash_root = tk.Tk()
     splash_root.overrideredirect(True)
@@ -43,23 +25,18 @@ _LANGCODE = ["eng", "th"]
 def set_langcode_eng_thai(systray):
     global _LANGCODE
     _LANGCODE = ["eng", "th"]
-
 def set_langcode_thai_eng(systray):
     global _LANGCODE
     _LANGCODE = ["tha", "en"]
-
 def set_langcode_japanese_thai(systray):
     global _LANGCODE
     _LANGCODE = ["jpn", "th"]
-
 def set_langcode_thai_japanese(systray):
     global _LANGCODE
     _LANGCODE = ["tha", "ja"]
-
 def set_langcode_chinese_thai(systray):
     global _LANGCODE
     _LANGCODE = ["chi_sim", "th"]
-
 def set_langcode_thai_chinese(systray):
     global _LANGCODE
     _LANGCODE = ["tha", "zh-cn"]
@@ -69,7 +46,27 @@ def set_langcode_thai_korean(systray):
 def set_langcode_korean_thai(systray):
     global _LANGCODE
     _LANGCODE = ["kor","th"]
-
+def set_langcode_eng_japanese(systray):
+    global _LANGCODE
+    _LANGCODE = ["eng","ja"]
+def set_langcode_eng_chinese(systray):
+    global _LANGCODE
+    _LANGCODE = ["eng","zh-cn"]
+def set_langcode_eng_korean(systray):
+    global _LANGCODE
+    _LANGCODE = ["eng","ko"]
+def set_langcode_eng_eng(systray):
+    global _LANGCODE
+    _LANGCODE = ["eng","en"]
+def set_langcode_japanese_eng(systray):
+    global _LANGCODE
+    _LANGCODE = ["jpn","en"]
+def set_langcode_korean_eng(systray):
+    global _LANGCODE
+    _LANGCODE = ["kor","en"]
+def set_langcode_chinese_eng(systray):
+    global _LANGCODE
+    _LANGCODE = ["chi_sim", "en"]
     
 def main_window():
     splash.destroy()
@@ -88,10 +85,22 @@ def show_splash():
     y = (screen_height - 200) // 2
     splash.geometry(f"300x200+{x}+{y}")
     
+    try:
+        img = Image.open("loading.png")  # Replace with your image path
+        img = img.resize((100,100),Image.LANCZOS)
+        splash_img = ImageTk.PhotoImage(img)
+        image_label = tk.Label(splash, image=splash_img)
+        image_label.image = splash_img
+        image_label.pack(pady=(10,0))
+    except FileNotFoundError:
+        print("Error: 'loading.png' not found.")
+        label = tk.Label(splash, text="Image not found.", font=("Arial",12))
+        label.pack(pady = (10,0))
 
-    
+
     label = tk.Label(splash, text="ยินดีต้อนรับเข้าสู่โปรเเกรมเเปลภาษา v 1.0", font=("Arial", 12))
-    label.pack(pady=20)
+    label.pack(pady=(10,20))
+  
 
     
     splash.after(3000, main_window)
@@ -108,6 +117,13 @@ def start_tray():
                         ('Thai-Chinese', None, set_langcode_thai_chinese),
                         ('Thai-Korean', None, set_langcode_thai_korean),
                         ('Korean-Thai', None, set_langcode_korean_thai),
+                        ('Eng-Japanese', None, set_langcode_eng_japanese),
+                        ('Eng-Chinese', None, set_langcode_eng_chinese),
+                        ('Eng-Korean', None, set_langcode_eng_korean),
+                        ('Eng-Eng', None, set_langcode_eng_eng),
+                        ('Japanese-Eng', None, set_langcode_japanese_eng),
+                        ('Korean-Eng', None, set_langcode_korean_eng),
+                        ('Chinese-Eng', None, set_langcode_chinese_eng),
                     )))
     systray = SysTrayIcon("./language.ico", "En_Th_OCR", menu_options, on_quit=event.on_end)
     systray.start()
