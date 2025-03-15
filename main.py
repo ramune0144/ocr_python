@@ -127,7 +127,10 @@ def start_tray():
                     )))
     systray = SysTrayIcon("./language.ico", "En_Th_OCR", menu_options, on_quit=event.on_end)
     systray.start()
-    speak.speak("เริ่มใช้โปรแกรมแปลภาษา", 'th')
+    try:
+        speak.speak("เริ่มใช้โปรแกรมแปลภาษา", 'th')
+    except:
+        pass
     keyboard.add_hotkey('ctrl + shift + z', lambda: event.run(_LANGCODE))
 
 if __name__ == "__main__":
